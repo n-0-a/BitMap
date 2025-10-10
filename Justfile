@@ -44,7 +44,7 @@ patch-for-macos: backup
 # Build the macOS app
 build: #check generate
     @echo "Building BitChat for macOS..."
-    @xcodebuild -project bitchat.xcodeproj -scheme "bitchat_macOS" -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" build
+    @xcodebuild -project bitchat.xcodeproj -scheme "bitchat (macOS)" -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" OTHER_SWIFT_FLAGS="-DBITCHAT_DEV_ALLOW_CLEARNET" build
 
 # Run the macOS app
 run: build
@@ -67,7 +67,7 @@ clean: restore
 # Quick run without cleaning (for development)
 dev-run: check
     @echo "Quick development build..."
-    @xcodebuild -project bitchat.xcodeproj -scheme "bitchat_macOS" -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" build
+    @xcodebuild -project bitchat.xcodeproj -scheme "bitchat (macOS)" -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" OTHER_SWIFT_FLAGS="-DBITCHAT_DEV_ALLOW_CLEARNET" build
     @find ~/Library/Developer/Xcode/DerivedData -name "bitchat.app" -path "*/Debug/*" -not -path "*/Index.noindex/*" | head -1 | xargs -I {} open "{}"
 
 # Show app info

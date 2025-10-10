@@ -13,7 +13,6 @@
 		A6E3E5702E77036A0032EA8A /* BitLogger in Frameworks */ = {isa = PBXBuildFile; productRef = A6E3E56F2E77036A0032EA8A /* BitLogger */; };
 		A6E3E5722E7703760032EA8A /* BitLogger in Frameworks */ = {isa = PBXBuildFile; productRef = A6E3E5712E7703760032EA8A /* BitLogger */; };
 		A6E3EA7F2E7706720032EA8A /* Tor in Frameworks */ = {isa = PBXBuildFile; productRef = A6E3EA7E2E7706720032EA8A /* Tor */; };
-		A6E3EA812E7706A80032EA8A /* Tor in Frameworks */ = {isa = PBXBuildFile; productRef = A6E3EA802E7706A80032EA8A /* Tor */; };
 		A6F183FD2E948783006A9046 /* tor-nolzma.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6F183FC2E948783006A9046 /* tor-nolzma.xcframework */; };
 		E0A1B2C3D4E5F6012345678D /* relays/online_relays_gps.csv in Resources */ = {isa = PBXBuildFile; fileRef = E0A1B2C3D4E5F6012345678A /* relays/online_relays_gps.csv */; };
 		E0A1B2C3D4E5F6012345678E /* relays/online_relays_gps.csv in Resources */ = {isa = PBXBuildFile; fileRef = E0A1B2C3D4E5F6012345678A /* relays/online_relays_gps.csv */; };
@@ -134,7 +133,6 @@
 			files = (
 				A6E3E5722E7703760032EA8A /* BitLogger in Frameworks */,
 				3EE336D150427F736F32B56C /* P256K in Frameworks */,
-				A6E3EA812E7706A80032EA8A /* Tor in Frameworks */,
 			);
 		};
 		B5A5CC493FFB3D8966548140 /* Frameworks */ = {
@@ -202,7 +200,6 @@
 			packageProductDependencies = (
 				B1D9136AA0083366353BFA2F /* P256K */,
 				A6E3E5712E7703760032EA8A /* BitLogger */,
-				A6E3EA802E7706A80032EA8A /* Tor */,
 			);
 			productName = bitchat_macOS;
 			productReference = 8F3A7C058C2C8E1A06C8CF8B /* bitchat.app */;
@@ -483,7 +480,7 @@
 				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				CODE_SIGN_ENTITLEMENTS = bitchatShareExtension/bitchatShareExtension.entitlements;
 				CODE_SIGN_STYLE = "$(CODE_SIGN_STYLE)";
-				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
+				DEVELOPMENT_TEAM = JM2722LK22;
 				INFOPLIST_FILE = bitchatShareExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = bitchat;
 				IPHONEOS_DEPLOYMENT_TARGET = "$(IPHONEOS_DEPLOYMENT_TARGET)";
@@ -494,6 +491,7 @@
 				);
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER).ShareExtension";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = chat.bitchat.map.bitchatShareExtension;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -515,7 +513,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_ENTITLEMENTS = bitchat/bitchat.entitlements;
 				CODE_SIGN_STYLE = "$(CODE_SIGN_STYLE)";
-				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
+				DEVELOPMENT_TEAM = JM2722LK22;
 				ENABLE_PREVIEWS = NO;
 				INFOPLIST_FILE = bitchat/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = bitchat;
@@ -527,6 +525,7 @@
 				);
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = chat.bitchat.map;
 				PRODUCT_NAME = bitchat;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -575,7 +574,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_ENTITLEMENTS = bitchat/bitchat.entitlements;
 				CODE_SIGN_STYLE = "$(CODE_SIGN_STYLE)";
-				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
+				DEVELOPMENT_TEAM = JM2722LK22;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = bitchat/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = bitchat;
@@ -587,6 +586,7 @@
 				);
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = chat.bitchat.map;
 				PRODUCT_NAME = bitchat;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -799,7 +799,7 @@
 				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				CODE_SIGN_ENTITLEMENTS = bitchatShareExtension/bitchatShareExtension.entitlements;
 				CODE_SIGN_STYLE = "$(CODE_SIGN_STYLE)";
-				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
+				DEVELOPMENT_TEAM = JM2722LK22;
 				INFOPLIST_FILE = bitchatShareExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = bitchat;
 				IPHONEOS_DEPLOYMENT_TARGET = "$(IPHONEOS_DEPLOYMENT_TARGET)";
@@ -810,6 +810,7 @@
 				);
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER).ShareExtension";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = chat.bitchat.map.bitchatShareExtension;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -910,10 +911,6 @@
 			productName = BitLogger;
 		};
 		A6E3EA7E2E7706720032EA8A /* Tor */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Tor;
-		};
-		A6E3EA802E7706A80032EA8A /* Tor */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Tor;
 		};

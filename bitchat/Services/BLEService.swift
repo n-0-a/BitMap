@@ -660,6 +660,46 @@ final class BLEService: NSObject {
             SecureLogger.debug("🕒 Queued DELIVERED ack for \(peerID) until handshake completes", category: .session)
         }
     }
+
+    func sendMapEvent(_ event: MapEvent) {
+        messageQueue.async { [weak self] in
+            guard let self = self else { return }
+            do {
+                let payload = try JSONEncoder().encode(event)
+                let packet = BitchatPacket(
+                    type: MessageType.mapEventCreate.rawValue,
+                    senderID: self.myPeerIDData,
+                    recipientID: nil,
+                    timestamp: UInt64(Date().timeIntervalSince1970 * 1000),
+                    payload: payload,
+                    signature: nil,
+                    ttl: self.messageTTL
+                )
+                self.broadcastPacket(packet)
+            } catch {
+                SecureLogger.error("Failed to encode or send map event: \(error)", category: .session)
+            }
+        }
+    }
+
+    func sendMapEventConfirmation(for eventID: UUID) {
+        messageQueue.async { [weak self] in
+            guard let self = self else { return }
+            let payload = eventID.uuidString.data(using: .utf8)!
+            let packet = BitchatPacket(
+                type: MessageType.mapEventConfirm.rawValue,
+                senderID: self.myPeerIDData,
+                recipientID: nil,
+                timestamp: UInt64(Date().timeIntervalSince1970 * 1000),
+                payload: payload,
+                signature: nil,
+                ttl: self.messageTTL
+            )
+            self.broadcastPacket(packet)
+        }
+    }
+
+
     
     // MARK: QR Verification over Noise
     
@@ -2351,6 +2391,25 @@ extension BLEService {
         case .requestSync:
             handleRequestSync(packet, from: senderID)
             
+        case .mapEventCreate:
+            guard let event = try? JSONDecoder().decode(MapEvent.self, from: packet.payload) else {
+                SecureLogger.warning("Failed to decode MapEvent from packet", category: .session)
+                return
+            }
+            DispatchQueue.main.async {
+                MapViewModel.shared.handleIncomingMapEvent(event)
+            }
+        
+        case .mapEventConfirm:
+            guard let eventIDString = String(data: packet.payload, encoding: .utf8),
+                  let eventID = UUID(uuidString: eventIDString) else {
+                SecureLogger.warning("Failed to decode MapEvent confirmation from packet", category: .session)
+                return
+            }
+            DispatchQueue.main.async {
+                MapViewModel.shared.handleIncomingConfirmation(eventID: eventID)
+            }
+
         case .noiseHandshake:
             handleNoiseHandshake(packet, from: senderID)
             
@@ -2603,13 +2662,37 @@ extension BLEService {
     
     // Mention parsing moved to ChatViewModel
     
-    private func handleMessage(_ packet: BitchatPacket, from peerID: PeerID) {
-        // Ignore self-origin public messages except when returned via sync (TTL==0).
-        // This allows our own messages to be surfaced when they come back via
-        // the sync path without re-processing regular relayed copies.
-        if peerID == myPeerID && packet.ttl != 0 { return }
-
-        // Reject stale broadcast messages to prevent old messages from appearing
+        private func handleMessage(_ packet: BitchatPacket, from peerID: PeerID) {
+            guard let content = String(data: packet.payload, encoding: .utf8) else {
+                SecureLogger.error("Failed to decode message payload as UTF-8", category: .session)
+                return
+            }
+    
+            if content.starts(with: "MAP_EVENT_CREATE:") {
+                let eventDataString = String(content.dropFirst("MAP_EVENT_CREATE:".count))
+                if let eventData = Data(base64Encoded: eventDataString),
+                   let event = try? JSONDecoder().decode(MapEvent.self, from: eventData) {
+                    DispatchQueue.main.async {
+                        MapViewModel.shared.handleIncomingMapEvent(event)
+                    }
+                }
+                return
+            }
+    
+            if content.starts(with: "MAP_EVENT_CONFIRM:") {
+                let eventIDString = String(content.dropFirst("MAP_EVENT_CONFIRM:".count))
+                if let eventID = UUID(uuidString: eventIDString) {
+                    DispatchQueue.main.async {
+                        MapViewModel.shared.handleIncomingConfirmation(eventID: eventID)
+                    }
+                }
+                return
+            }
+            
+            // ... rest of the function
+            if peerID == myPeerID && packet.ttl != 0 { return }
+            // ...
+                // Reject stale broadcast messages to prevent old messages from appearing
         // Use same 15-minute window as gossip sync (900 seconds)
         // Check if this is a broadcast message (recipient is all 0xFF or nil)
         let isBroadcast: Bool = {

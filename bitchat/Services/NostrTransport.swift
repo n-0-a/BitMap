@@ -127,27 +127,7 @@ final class NostrTransport: Transport {
 
     func sendBroadcastAnnounce() { /* no-op for Nostr */ }
     func sendDeliveryAck(for messageID: String, to peerID: PeerID) {
-        Task { @MainActor in
-            guard let recipientNpub = resolveRecipientNpub(for: peerID) else { return }
-            guard let senderIdentity = try? NostrIdentityBridge.getCurrentNostrIdentity() else { return }
-            SecureLogger.debug("NostrTransport: preparing DELIVERED ack for id=\(messageID.prefix(8))… to \(recipientNpub.prefix(16))…", category: .session)
-            let recipientHex: String
-            do {
-                let (hrp, data) = try Bech32.decode(recipientNpub)
-                guard hrp == "npub" else { return }
-                recipientHex = data.hexEncodedString()
-            } catch { return }
-            guard let ack = NostrEmbeddedBitChat.encodeAckForNostr(type: .delivered, messageID: messageID, recipientPeerID: peerID.id, senderPeerID: senderPeerID.id) else {
-                SecureLogger.error("NostrTransport: failed to embed DELIVERED ack", category: .session)
-                return
-            }
-            guard let event = try? NostrProtocol.createPrivateMessage(content: ack, recipientPubkey: recipientHex, senderIdentity: senderIdentity) else {
-                SecureLogger.error("NostrTransport: failed to build Nostr event for DELIVERED ack", category: .session)
-                return
-            }
-            SecureLogger.debug("NostrTransport: sending DELIVERED ack giftWrap id=\(event.id.prefix(16))…", category: .session)
-            NostrRelayManager.shared.sendEvent(event)
-        }
+        // Not implemented for Nostr transport
     }
 }
 

@@ -80,6 +80,10 @@ enum MessageType: UInt8 {
     // Fragmentation (simplified)
     case fragment = 0x20        // Single fragment type for large messages
     
+    // Map Events
+    case mapEventCreate = 0x30
+    case mapEventConfirm = 0x31
+    
     var description: String {
         switch self {
         case .announce: return "announce"
@@ -89,6 +93,8 @@ enum MessageType: UInt8 {
         case .noiseHandshake: return "noiseHandshake"
         case .noiseEncrypted: return "noiseEncrypted"
         case .fragment: return "fragment"
+        case .mapEventCreate: return "mapEventCreate"
+        case .mapEventConfirm: return "mapEventConfirm"
         }
     }
 }

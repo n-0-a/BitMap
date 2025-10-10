@@ -61,6 +61,7 @@ struct ContentView: View {
     // Window sizes for rendering (infinite scroll up)
     @State private var windowCountPublic: Int = 300
     @State private var windowCountPrivate: [String: Int] = [:]
+    @State private var showMapView = false
     
     // MARK: - Computed Properties
     
@@ -207,6 +208,10 @@ struct ContentView: View {
             AppInfoView()
                 .onAppear { viewModel.isAppInfoPresented = true }
                 .onDisappear { viewModel.isAppInfoPresented = false }
+        }
+        .sheet(isPresented: $showMapView) {
+            MapView()
+                .environmentObject(viewModel)
         }
         .sheet(isPresented: Binding(
             get: { viewModel.showingFingerprintFor != nil },
@@ -1269,6 +1274,12 @@ struct ContentView: View {
                 .fixedSize(horizontal: true, vertical: false)
 
                 // QR moved to the PEOPLE header in the sidebar when on mesh channel
+                Button(action: { showMapView.toggle() }) {
+                    Image(systemName: "map")
+                        .font(.bitchatSystem(size: 14))
+                }
+                .buttonStyle(.plain)
+                .help("Show Map")
             }
             .layoutPriority(3)
             .onTapGesture {

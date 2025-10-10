@@ -1464,6 +1464,23 @@ final class ChatViewModel: ObservableObject, BitchatDelegate {
 
         updateChannelActivityTimeThenSend(content: content, trimmed: trimmed, mentions: mentions)
     }
+
+
+    
+    func sendMapEvent(_ event: MapEvent) {
+        do {
+            let eventData = try JSONEncoder().encode(event)
+            let eventString = "MAP_EVENT_CREATE:" + eventData.base64EncodedString()
+            meshService.sendMessage(eventString, mentions: [])
+        } catch {
+            SecureLogger.error("Failed to encode map event for sending: \(error)", category: .session)
+        }
+    }
+
+    func sendMapEventConfirmation(for eventID: UUID) {
+        let eventString = "MAP_EVENT_CONFIRM:" + eventID.uuidString
+        meshService.sendMessage(eventString, mentions: [])
+    }
     
     private func updateChannelActivityTimeThenSend(content: String, trimmed: String, mentions: [String]) {
         switch activeChannel {
